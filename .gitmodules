@@ -1,9 +1,6 @@
 [submodule "client-gateway"]
 	path = client-gateway
 	url = https://github.com/fedoka-microservices/client-gateway.git
-[submodule "supplier-go-service"]
-	path = supplier-go-service
-	url = https://github.com/fedoka-microservices/supplier-go-service.git
 [submodule "order-service"]
 	path = order-service
 	url = https://github.com/fedoka-microservices/order-service.git
