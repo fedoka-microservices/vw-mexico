@@ -39,7 +39,7 @@ services:
       - NATS_SERVERS=nats://nats-server:4222
 
   orders-db:
-      container_name: orders-db
+      # container_name: orders-db
       image: postgres:16.2
       restart: always
       volumes:
@@ -69,12 +69,14 @@ services:
     
   supplier-service-db:
     image: mysql:8.0.42
-    container_name: supplier-service-db
+    # container_name: supplier-service-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: dev_password
       MYSQL_DATABASE: supplierdb
     volumes:
-      - ./supplier-go-service/mysql-data:/var/lib/mysql
+      - supplier_mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
+volumes:
+  supplier_mysql_data:
