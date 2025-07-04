@@ -50,22 +50,22 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=123456
         - POSTGRES_DB=ordersdb
-  # supplier-service:
-  #   depends_on:
-  #     - supplier-service-db
-  #     - nats-server
-  #   build: ./supplier-go-service
-  #   working_dir: /app
-  #   ports:
-  #     - "3003:3003"
-  #   environment:
-  #     - DB_CONNECTION=mysql
-  #     - DB_HOST=supplier-service-db
-  #     - DB_PORT=3306
-  #     - DB_NAME=supplierdb
-  #     - DB_USERNAME=root
-  #     - DB_PASSWORD=dev_password
-  #     - NATS_SERVERS=nats://nats-server:4222
+  supplier-service:
+    depends_on:
+      - supplier-service-db
+      - nats-server
+    build: ./supplier-go-service
+    working_dir: /app
+    ports:
+      - "3003:3003"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=supplier-service-db
+      - DB_PORT=3306
+      - DB_NAME=supplierdb
+      - DB_USERNAME=root
+      - DB_PASSWORD=dev_password
+      - NATS_SERVERS=nats://nats-server:4222
     
   supplier-service-db:
     image: mysql:8.0.42
