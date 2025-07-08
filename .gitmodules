@@ -10,3 +10,6 @@
 [submodule "product-service"]
 	path = product-service
 	url = https://github.com/fedoka-microservices/product-service.git
+[submodule "payment-service"]
+	path = payment-service
+	url = https://github.com/fedoka-microservices/payment-service.git
