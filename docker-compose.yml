@@ -8,13 +8,13 @@ services:
   client-gateway:
     build: ./client-gateway
     ports:
-      - "${CLIENT_GATEWAY_PORT}:3000"
+      - "${CLIENT_GATEWAY_PORT}:${CLIENT_GATEWAY_PORT}"
     volumes: 
       - ./client-gateway/src:/usr/src/app/src
     command: yarn start:dev
     environment:
       - PORT=3000
-      - NATS_SERVERS=nats://nats-server:4222
+      - NATS_SERVERS=${NATS_SERVERS}
 
   products-service:
     build: ./product-service
@@ -23,7 +23,7 @@ services:
     command: yarn start:dev
     environment:
       - PORT=3001
-      - NATS_SERVERS=nats://nats-server:4222
+      - NATS_SERVERS=${NATS_SERVERS}
       - DATABASE_URL=file:./dev.db
     
   orders-service:
@@ -36,7 +36,7 @@ services:
     environment:
       - PORT=3002
       - DATABASE_URL=postgresql://postgres:123456@orders-db:5432/ordersdb?schema=public
-      - NATS_SERVERS=nats://nats-server:4222
+      - NATS_SERVERS=${NATS_SERVERS}
 
   orders-db:
       # container_name: orders-db
@@ -56,8 +56,6 @@ services:
       - nats-server
     build: ./supplier-go-service
     working_dir: /app
-    ports:
-      - "3003:3003"
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=supplier-service-db
@@ -65,7 +63,7 @@ services:
       - DB_NAME=supplierdb
       - DB_USERNAME=root
       - DB_PASSWORD=dev_password
-      - NATS_SERVERS=nats://nats-server:4222
+      - NATS_SERVERS=${NATS_SERVERS}
     
   supplier-service-db:
     image: mysql:8.0.42
@@ -78,6 +76,21 @@ services:
       - supplier_mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    
+  payments-service:
+    build: ./payment-service
+    volumes: 
+      - ./payment-service/src:/usr/src/app/src
+    command: yarn start:dev
+    ports:
+      - "${PAYMENT_SERVICE_PORT}:${PAYMENT_SERVICE_PORT}"
+    environment:
+      - PORT=${PAYMENT_SERVICE_PORT}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
+      - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
+      - STRIPE_ENDPOINT_SECRET=${STRIPE_ENDPOINT_SECRET}
+      - NATS_SERVERS=${NATS_SERVERS}
 volumes:
   supplier_mysql_data:
   orders_postgres_data:
